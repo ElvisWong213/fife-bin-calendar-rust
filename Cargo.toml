@@ -10,3 +10,5 @@ reqwest = { version = "0.11.23", features = ["json"] }
 serde = { version = "1.0.194", features = ["derive"] }
 serde_json = "1.0.111"
 rocket = { version = "0.5.0", features = ["json"] }
+chrono = "0.4.31"
+tokio = "1.35.1"

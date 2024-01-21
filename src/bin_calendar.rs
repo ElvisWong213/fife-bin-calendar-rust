@@ -1,10 +1,57 @@
 use crate::models::address::Address;
-use crate::models::bin::Bin;
+use crate::models::bin::{Bin, TabCollection};
 use crate::models::profile_data_response::ProfileDataResponse;
 
 use reqwest::header::HeaderMap;
 use reqwest::{Client, RequestBuilder};
 use serde_json::{json, Value};
+use chrono::{DateTime, Local};
+use serde::{Serialize, Serializer};
+
+pub fn serialize_dt<S>(dt: &Option<DateTime<Local>>, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer {
+    if let Some(dt) = dt {
+        dt.format("%m/%d/%Y %H:%M")
+            .to_string()
+            .serialize(serializer)
+    } else {
+        serializer.serialize_none()
+    }
+}
+
+#[derive(Serialize, Clone)]
+pub struct BinColor {
+    pub colors: Vec<String>,
+    #[serde(serialize_with = "serialize_dt")]
+    pub update_date: Option<DateTime<Local>>
+}
+
+impl BinColor {
+    pub fn new() -> Self {
+        BinColor {
+            colors: vec![],
+            update_date: Default::default(),
+        }
+    }
+}
+
+pub fn get_bin_color(tab_collections: Vec<TabCollection>) -> Option<BinColor> {
+    if tab_collections.is_empty() {
+        return None;
+    }
+    let mut bin_data: BinColor = BinColor::new();
+    bin_data.update_date = Option::from(Local::now());
+    let target_date: String = tab_collections[0].date.to_string();
+    for tab_collection in tab_collections {
+        if tab_collection.date == target_date {
+            let color = tab_collection.colour;
+            bin_data.colors.push(color);
+        }
+    }
+    if bin_data.colors.is_empty() {
+        return None;
+    }
+    return Option::from(bin_data);
+}
 
 pub async fn get_bin_calendar(authorization: &str, uprn: &str) -> Option<Bin> {
     let url: &str = "https://www.fife.gov.uk/api/custom?action=powersuite_bin_calendar_collections&actionedby=bin_calendar&loadform=true&access=citizen&locale=en";

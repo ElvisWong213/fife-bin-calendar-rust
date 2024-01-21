@@ -4,7 +4,6 @@ mod bin_calendar;
 use std::process::exit;
 use std::fs;
 use tokio::sync::Mutex;
-use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::State;
 use chrono::Local;
@@ -38,7 +37,10 @@ async fn index(config: &State<Config>) -> Json<Option<BinColor>> {
             Local::now().signed_duration_since(target_time).num_hours()
         }
     };
-    let mut color: Option<BinColor> = None;
+    let mut color: Option<BinColor> = Option::from(BinColor{
+        colors: bin_color.colors.clone(),
+        update_date: bin_color.update_date
+    });
     if duration >= 12 {
         let authorization: String = bin_calendar::get_authorization().await;
         let bin_calendar: Option<Bin> = bin_calendar::get_bin_calendar(&authorization, &config.uprn).await;
@@ -62,7 +64,7 @@ async fn main() -> Result<(), rocket::Error> {
     }
     let _rocket = rocket::build()
         .manage(config)
-        .mount("/", routes![index, dump])
+        .mount("/", routes![index])
         .launch()
         .await?;
     Ok(())

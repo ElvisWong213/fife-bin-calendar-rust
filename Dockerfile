@@ -1,6 +1,7 @@
-FROM rust:1.75-slim-buster
+FROM rust:1.75-slim-bookworm
 
 WORKDIR /usr/src/fife-bin-calendar
+
 COPY . .
 
 RUN apt-get update -y && \

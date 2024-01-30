@@ -33,6 +33,9 @@ Fife Bin Calendar is a project utilizing Rust to host API servers using the Rust
     ```
   - When the container is running, you can follow the terminal’s prompts to enter your postcode and choose your address. The information will be saved in the ﻿uprn.txt file
   - If you want to chage your address. Stop the container, remove the `uprn.txt` file and run the container again.
+    ```
+    docker start fife-bin
+    ```
 
 ### Setup ESP8266
 - Follow the circuit design to buid the circuit

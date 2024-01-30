@@ -66,8 +66,9 @@ pub async fn get_bin_calendar(authorization: &str, uprn: &str) -> Option<Bin> {
         .await
     {
         Ok(response) => response,
-        Err(_) => {
+        Err(e) => {
             println!("Invalid response");
+            println!("{}", e);
             return None;
         }
     };
@@ -90,8 +91,9 @@ pub async fn get_address_list(authorization: &str, postcode: &str) -> Option<Add
         .await
     {
         Ok(response) => response,
-        Err(_) => {
+        Err(e) => {
             println!("Invalid response");
+            println!("{}", e);
             return None;
         }
     };
@@ -119,8 +121,9 @@ pub async fn get_uprn(authorization: &str, objectid: &str) -> String {
         .await
     {
         Ok(response) => response,
-        Err(_) => {
+        Err(e) => {
             println!("Invalid response");
+            println!("{}", e);
             return String::new();
         }
     };
@@ -149,8 +152,9 @@ pub async fn get_authorization() -> String {
     // let url: String = "127.0.0.1".to_string();
     let res = match client.get(url).send().await {
         Ok(response) => response,
-        Err(_) => {
+        Err(e) => {
             println!("Invalid response");
+            println!("{}", e);
             return String::new();
         }
     };

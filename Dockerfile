@@ -1,14 +1,19 @@
-FROM rust:1.75-slim-bookworm
+FROM rust:1.75 as builder
 
-WORKDIR /usr/src/fife-bin-calendar
+WORKDIR /app
 
 COPY . .
 
-RUN apt-get update -y && \
-      apt-get install -y pkg-config libssl-dev
+RUN cargo build --release
 
-RUN cargo install --path .
+FROM debian:bookworm-slim
+
+RUN apt-get update -y && apt-get install -y pkg-config libssl-dev openssl ca-certificates
+
+WORKDIR /fife-bin-calendar
+
+COPY --from=builder /app/target/release/fife-bin-calendar /app/Rocket.toml ./
 
 EXPOSE 8000
 
-CMD ["fife-bin-calendar"]
+CMD ["./fife-bin-calendar"]

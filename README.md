@@ -29,7 +29,7 @@ Fife Bin Calendar is a project utilizing Rust to host API servers using the Rust
     ```
   - Run the image (You can change port 8888 to any port you want)
     ```
-    docker run --name fife-bin -it -p 8888:8000 fife-bin-calendar
+    docker run --name fife-bin -it -p 8888:8000 elviswong213/fife-bin-calendar
     ```
   - When the container is running, you can follow the terminal’s prompts to enter your postcode and choose your address. The information will be saved in the ﻿uprn.txt file
   - If you want to chage your address. Stop the container, remove the `uprn.txt` file and run the container again.

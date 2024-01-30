@@ -1,4 +1,5 @@
 # Fife Bin Calendar Rust
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ElvisWong)
 
 ## About this project
 Fife Bin Calendar is a project utilizing Rust to host API servers using the Rust Rocket framework. The project also incorporates an ESP8266 development board to connect custom API servers, enabling users to conveniently access and display the scheduled bin collections for the upcoming week. This innovative combination of technologies offers a seamless and efficient solution for managing waste disposal schedules, enhancing user experience, and promoting sustainability.

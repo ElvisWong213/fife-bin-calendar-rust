@@ -22,7 +22,8 @@ pub fn serialize_dt<S>(dt: &Option<DateTime<Local>>, serializer: S) -> Result<S:
 pub struct BinColor {
     pub colors: Vec<String>,
     #[serde(serialize_with = "serialize_dt")]
-    pub update_date: Option<DateTime<Local>>
+    pub update_date: Option<DateTime<Local>>,
+    pub collect_date: String
 }
 
 impl BinColor {
@@ -30,8 +31,17 @@ impl BinColor {
         BinColor {
             colors: vec![],
             update_date: Default::default(),
+            collect_date: String::new(),
         }
     }
+}
+
+fn collect_date(date: String) -> String {
+    let split_date: Vec<&str> = date.split(", ").collect();
+    if split_date.len() != 3 {
+        return String::new();
+    }
+    return split_date[1].to_string();
 }
 
 pub fn get_bin_color(tab_collections: Vec<TabCollection>) -> Option<BinColor> {
@@ -41,6 +51,7 @@ pub fn get_bin_color(tab_collections: Vec<TabCollection>) -> Option<BinColor> {
     let mut bin_data: BinColor = BinColor::new();
     bin_data.update_date = Option::from(Local::now());
     let target_date: String = tab_collections[0].date.to_string();
+    bin_data.collect_date = collect_date(target_date.clone());
     for tab_collection in tab_collections {
         if tab_collection.date == target_date {
             let color = tab_collection.colour;
